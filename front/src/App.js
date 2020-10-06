@@ -14,7 +14,7 @@ function App() {
     <Layout className="layout">
     <Header>
       <div className="logo" />
-      <Title style={{color:'white',textAlign:'center'}} level={1}>My mini-app</Title>
+      <Title style={{color:'white',textAlign:'center'}} level={1}>My mini app</Title>
 
     </Header>
 
