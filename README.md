@@ -1,5 +1,5 @@
 # TEST
-To run this project you must follow these steps : 
+# To run this project you must follow these steps : 
 1- clone or download the project 
 2- run the following commmands to install dependecies:
     cd Back
