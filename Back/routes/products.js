@@ -63,17 +63,47 @@ const productRoutes = (app, fs) => {
             // add the new product
             data[product_id.toString()] = p;
             writeFile(JSON.stringify(data, null, 2), () => {
-              res.status(200).send('new product added');
+              res.status(200).json({
+                message: 'new product added'
+              });
             });
           },
           true);
 
       } else {
-        res.status(400).send('error while adding');
+        res.status(400).json({
+          message: 'error while adding'
+        });
 
       }
     })
 
+  });
+  // Function that will return an object of product after fidning it 
+  app.get('/products/:id', (req, res) => {
+
+    readFile(data => {
+
+        // search for the the new product
+
+        if (Object.keys(data).length > 0) {
+          index = data.findIndex(it => it.product_id === req.params["id"]);
+          if (index != -1) {
+            res.status(200).json({
+              product: data[index]
+            });
+
+
+          } else {
+            res.status(400).json({
+              message: ` error while removing or already empty`
+            });
+          }
+        }
+
+
+      },
+      true);
   });
 
   //Function that will search withing the file for the product to be deleted 
@@ -86,12 +116,16 @@ const productRoutes = (app, fs) => {
 
         if (Object.keys(data).length > 0) {
           index = data.findIndex(it => it.product_id === req.params["id"]);
-         data.splice(index,1);
+          data.splice(index, 1);
           writeFile(JSON.stringify(data, null, 2), () => {
-            res.status(200).send(` removed`);
+            res.status(200).json({
+              message: `removed`
+            });
           });
         } else {
-          res.status(400).send(` error while removing or already empty`);
+          res.status(400).json({
+            message: `error while removing or already empty`
+          });
         }
 
 
@@ -99,29 +133,32 @@ const productRoutes = (app, fs) => {
       true);
   });
 
-//Function that will increment the quantity by 1 after searching for the product
-//and return an error in case of the product not found or the JSON file is empty 
+  //Function that will increment the quantity by 1 after searching for the product
+  //and return an error in case of the product not found or the JSON file is empty 
   app.put('/products/:id', (req, res) => {
     readFile(data => {
-    if (Object.keys(data).length > 0) {
-      index = data.findIndex(it => it.product_id === req.params["id"]);
-      if(index!=-1){
-        data[index].quantity+=1
-      writeFile(JSON.stringify(data, null, 2), () => {
-        res.status(200).send(` quantity added`);
-      });
-      }
-    
-      else {
-        res.status(400).send(` error while adding quantity or not found`);
-      }
-    } 
-    else {
-      res.status(400).send(`empty file`);
-    }
-  },
-  true);
-});
+        if (Object.keys(data).length > 0) {
+          index = data.findIndex(it => it.product_id === req.params["id"]);
+          if (index != -1) {
+            data[index].quantity += 1
+            writeFile(JSON.stringify(data, null, 2), () => {
+              res.status(200).json({
+                message: ` quantity added`
+              });
+            });
+          } else {
+            res.status(400).json({
+              message: `error while adding quantity or not found`
+            });
+          }
+        } else {
+          res.status(400).json({
+            message: `empty file`
+          });
+        }
+      },
+      true);
+  });
 
 };
 
